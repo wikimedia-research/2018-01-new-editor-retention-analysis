@@ -1,5 +1,5 @@
 select 
-    mo_1.user as user,
+    mo_1.name as name,
     mo_1.reg_day as reg_day,
     mo_1.revs as mo_1_revs,
     coalesce(mo_2.revs, 0) as mo_2_revs,
@@ -7,7 +7,7 @@ select
     coalesce(mo_2.reverts, 0) as mo_2_reverts
 from (
     select
-        event_user_text as user,
+        event_user_text as name,
         substr(event_user_creation_timestamp, 0, 10) as reg_day,
         count(*) as revs,
         sum(cast(revision_is_identity_reverted as int)) as reverts
@@ -26,7 +26,7 @@ from (
     ) mo_1
 left join (
     select
-        event_user_text as user,
+        event_user_text as name,
         substr(event_user_creation_timestamp, 0, 10) as reg_day,
         count(*) as revs,
         sum(cast(revision_is_identity_reverted as int)) as reverts
@@ -46,5 +46,5 @@ left join (
         group by event_user_text, event_user_creation_timestamp
     ) mo_2
 on
-    (mo_1.user = mo_2.user and
+    (mo_1.name = mo_2.name and
     mo_1.reg_day = mo_2.reg_day)
